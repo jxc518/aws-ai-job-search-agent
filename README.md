@@ -8,6 +8,8 @@ https://main.d1lez6edks2xou.amplifyapp.com/
 
 ## What the Platform Does
 
+**Status:** DEPLOYED — Phase 1 Complete (2026-09-29) 
+
 **Discover -> Govern -> Rank -> Review**
 
 - Collects public job opportunities through company-specific connectors.
