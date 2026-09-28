@@ -23,37 +23,20 @@ https://main.d1lez6edks2xou.amplifyapp.com/
 
 ## Architecture
 
-`	ext
-Profile Configuration
-        |
-        v
-Search Planner
-        |
-        v
-Company Connectors
-        |
-        v
-Canonical JobPosting
-        |
-        v
-Profile / Clearance Governance
-        |
-        v
-AWS Lambda + Amazon S3
-        |
-        v
-Amazon SageMaker
-        |
-        v
-Amazon Bedrock
-        |
-        v
-Governed Result
-        |
-        v
-AWS Amplify Website
-`",
-",
+```mermaid
+flowchart LR
+    A[Profile Configuration] --> B[Search Planning]
+    B --> C[Company Connectors]
+    C --> D[Canonical JobPosting]
+    D --> E[AWS Lambda / S3]
+    E --> F[Profile & Clearance Governance]
+    E --> G[ML Ranking / SageMaker]
+    E --> H[GenAI Review / Bedrock]
+    F --> I[Governed Result]
+    G --> I
+    H --> I
+    I --> J[AWS Amplify Website]
+```
 
 
 - Multi-company connector architecture
