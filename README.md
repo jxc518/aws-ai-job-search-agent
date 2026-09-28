@@ -72,20 +72,6 @@ AWS Amplify Website
 
 The repository contains a curated subset of the project source code intended to demonstrate the core architecture without publishing development artifacts, credentials, private configuration, or the complete production environment.
 
-`	ext
-src/
-  _job_search_v1A_001_schema_job_posting.py
-  _job_search_v1A_008_config_search_terms.py
-  _job_search_v1A_009_collector_capital_one.py
-  _job_search_v1A_011_collector_gdit.py
-  _job_search_v1A_015_collector_pfizer.py
-  _job_search_v1B_001_lambda_handler.py
-  _job_search_v1D_001_profile_search_policy.py
-  _job_search_v1D_002_result_composer.py
-`",
-",
-
-
 A validated government-contractor workflow preserves the original job evidence, normalizes clearance requirements, applies profile eligibility policy, retains the SageMaker ranking signal, and carries the Bedrock review status and evidence limitations into the canonical downstream result.
 
 ML ranking scores in this project are demonstration signals and should not be interpreted as calibrated probabilities of receiving a job offer.
