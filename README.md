@@ -89,14 +89,36 @@ Python | AWS Lambda | Amazon S3 | Amazon SageMaker | Amazon Bedrock | AWS Amplif
 
 ## Repository Structure
 
-`	ext
-aws-ai-job-search-agent/
-  src/       Curated Python architecture and governance modules
-  web/       Recruiter-facing web application and public job snapshot
-  docs/      Architecture and supporting documentation
-  examples/  Public examples
-`",
-",
+'''
+Profile Configuration
+        |
+        v
+Search Planner
+        |
+        v
+Company Connectors
+        |
+        v
+Canonical JobPosting
+        |
+        v
+Profile / Clearance Governance
+        |
+        v
+AWS Lambda + Amazon S3
+        |
+        v
+Amazon SageMaker
+        |
+        v
+Amazon Bedrock
+        |
+        v
+Governed Result
+        |
+        v
+AWS Amplify Website
+'''
 
 
 Portfolio proof of concept and engineering demonstration.
