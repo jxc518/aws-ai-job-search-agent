@@ -51,7 +51,7 @@ flowchart LR
 - End-to-end result contract validation
 - AWS Amplify portfolio deployment
 
-<img width="646" height="2001" alt="image" src="https://github.com/user-attachments/assets/88e4ff17-6a94-46f0-9e69-b475494277f6" />
+<img width="666" height="2001" alt="image" src="https://github.com/user-attachments/assets/cecca1ad-9234-408d-be85-b5dbd6309d71" />
 
 
 
