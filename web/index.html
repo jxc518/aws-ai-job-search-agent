@@ -1,0 +1,379 @@
+﻿<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AWS AI Job Search Agent | Portfolio Project</title>
+<meta name="description" content="An end-to-end AWS AI job search platform using Lambda, S3, SageMaker, Bedrock and Python.">
+<style>
+:root{
+  --ink:#172033;--muted:#667085;--line:#e7eaf0;--soft:#f6f8fc;
+  --blue:#2563eb;--blue2:#1d4ed8;--navy:#0b1736;--green:#087a55;
+  --purple:#6d5bd0;--orange:#f59e0b;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:#fff;color:var(--ink);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+a{color:inherit}
+header{
+  position:sticky;top:0;z-index:10;background:rgba(255,255,255,.94);
+  backdrop-filter:blur(10px);border-bottom:1px solid var(--line);
+  padding:15px 5%;display:flex;align-items:center;justify-content:space-between;gap:18px
+}
+.brand{font-weight:850;letter-spacing:-.02em}
+.brand span{color:var(--blue)}
+.nav{display:flex;gap:18px;align-items:center;font-size:14px;font-weight:700;color:#475467}
+.nav a{text-decoration:none}
+.wrap{max-width:1180px;margin:auto;padding:0 24px}
+.hero{
+  background:
+    radial-gradient(circle at 88% 15%,rgba(37,99,235,.17),transparent 28%),
+    radial-gradient(circle at 70% 75%,rgba(109,91,208,.13),transparent 28%),
+    linear-gradient(135deg,#07132f,#10285c);
+  color:#fff;padding:82px 0 68px
+}
+.eyebrow{font-size:13px;font-weight:850;letter-spacing:.13em;text-transform:uppercase;color:#9fc2ff}
+.hero-grid{display:grid;grid-template-columns:1.2fr .8fr;gap:46px;align-items:center}
+h1{font-size:clamp(42px,6vw,68px);line-height:1.02;letter-spacing:-.045em;margin:14px 0 20px}
+.hero h2{font-size:clamp(22px,3vw,34px);line-height:1.2;margin:0 0 18px;font-weight:720;color:#dce8ff}
+.lead{font-size:18px;line-height:1.7;color:#cbd7ef;max-width:760px}
+.actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:28px}
+.btn{display:inline-block;text-decoration:none;padding:12px 17px;border-radius:10px;font-weight:800;font-size:14px}
+.btn-primary{background:#fff;color:#10285c}
+.btn-secondary{border:1px solid #6079ac;color:#fff;background:#ffffff0d}
+.stack{display:flex;flex-wrap:wrap;gap:9px;margin-top:27px}
+.pill{border:1px solid #5570a8;background:#ffffff0c;padding:7px 10px;border-radius:999px;color:#dce7fb;font-size:13px;font-weight:700}
+.hero-panel{background:#ffffff0d;border:1px solid #ffffff24;border-radius:22px;padding:24px;box-shadow:0 25px 60px #0003}
+.metric{display:flex;justify-content:space-between;gap:18px;padding:15px 0;border-bottom:1px solid #ffffff1f}
+.metric:last-child{border-bottom:0}
+.metric small{display:block;color:#9fb0d0;margin-bottom:4px}
+.metric strong{font-size:15px}
+.status{color:#6ee7b7;font-weight:850}
+.section{padding:68px 0}
+.section.alt{background:var(--soft)}
+.kicker{font-size:12px;color:var(--blue);font-weight:850;letter-spacing:.12em;text-transform:uppercase}
+.section h2{font-size:clamp(30px,4vw,42px);letter-spacing:-.035em;margin:8px 0 12px}
+.section-intro{color:var(--muted);line-height:1.7;max-width:760px;margin-bottom:30px}
+.workflow{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.step{background:#fff;border:1px solid var(--line);border-radius:16px;padding:22px;position:relative}
+.step-no{width:32px;height:32px;display:grid;place-items:center;background:#eaf1ff;color:var(--blue);border-radius:9px;font-weight:900;margin-bottom:16px}
+.step h3{margin:0 0 8px;font-size:18px}
+.step p,.feature p{color:var(--muted);line-height:1.55;margin:0;font-size:14px}
+.features{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.feature{border:1px solid var(--line);border-radius:16px;padding:22px;background:#fff}
+.feature-icon{font-size:12px;color:var(--blue);font-weight:900;letter-spacing:.08em;margin-bottom:11px}
+.feature h3{margin:0 0 8px;font-size:17px}
+.demo-grid{display:grid;grid-template-columns:.9fr 1.1fr;gap:22px;align-items:start}
+.job-demo{background:#fff;border:1px solid var(--line);border-radius:20px;padding:25px;box-shadow:0 14px 45px #17203310}
+.demo-head{display:flex;justify-content:space-between;gap:15px;align-items:start;border-bottom:1px solid var(--line);padding-bottom:18px}
+.demo-head h3{font-size:24px;margin:5px 0}
+.badge{display:inline-block;padding:6px 9px;border-radius:999px;background:#edf4ff;color:var(--blue);font-size:12px;font-weight:850}
+.good{background:#eafaf3;color:var(--green)}
+.row{display:grid;grid-template-columns:1fr auto;gap:15px;padding:15px 0;border-bottom:1px solid var(--line)}
+.row:last-child{border-bottom:0}
+.row small{display:block;color:var(--muted);margin-bottom:4px}
+.note{font-size:12px;color:var(--muted);line-height:1.5;margin-top:12px}
+.arch{background:var(--navy);color:#fff;border-radius:20px;padding:27px}
+.arch-flow{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:22px 0}
+.node{background:#ffffff12;border:1px solid #ffffff25;padding:10px 12px;border-radius:10px;font-size:13px;font-weight:800}
+.arrow{color:#8eb6ff}
+.arch p{color:#b8c5df;line-height:1.6}
+.tabs{display:flex;gap:10px;flex-wrap:wrap;margin:24px 0}
+.tabs button{padding:11px 15px;border:1px solid #d8deea;border-radius:10px;background:#fff;cursor:pointer;font-weight:800;color:#475467}
+.tabs button.active{background:var(--navy);border-color:var(--navy);color:#fff}
+.hidden{display:none}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(285px,1fr));gap:14px}
+.card,.empty{background:#fff;border:1px solid var(--line);border-radius:15px;padding:19px}
+.card h3{margin:4px 0 10px;font-size:17px;line-height:1.35}
+.muted{color:var(--muted);line-height:1.55}
+.card .muted{font-size:14px;margin:7px 0}
+.card .btn{background:#eef3ff;color:var(--blue2);margin-top:8px;padding:9px 12px}
+.company-title{margin:30px 0 12px}
+footer{padding:30px 5%;color:#667085;border-top:1px solid var(--line);font-size:13px;line-height:1.6}
+@media(max-width:850px){
+  .hero-grid,.demo-grid{grid-template-columns:1fr}
+  .workflow{grid-template-columns:repeat(2,1fr)}
+  .features{grid-template-columns:repeat(2,1fr)}
+  .nav{display:none}
+}
+@media(max-width:560px){
+  .workflow,.features{grid-template-columns:1fr}
+  .hero{padding:58px 0 48px}
+}
+
+/* ===== DAILY SEARCH HISTORY ===== */
+.search-history{
+  margin:24px 0 26px;
+  padding:20px 22px;
+  border:1px solid #dbe5f3;
+  border-radius:18px;
+  background:linear-gradient(135deg,#f8fbff 0%,#f5f3ff 100%);
+}
+.search-history-top{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-end;
+  gap:18px;
+  flex-wrap:wrap;
+}
+.search-history-title{
+  font-size:15px;
+  font-weight:850;
+  color:#172033;
+  letter-spacing:.02em;
+}
+.search-history-schedule{
+  font-size:13px;
+  color:#667085;
+  font-weight:700;
+}
+.day-tabs{
+  display:flex;
+  flex-wrap:wrap;
+  gap:9px;
+  margin-top:15px;
+}
+.day-tab{
+  border:1px solid #d0d9e8;
+  background:#fff;
+  color:#344054;
+  border-radius:10px;
+  padding:9px 14px;
+  font-size:12px;
+  font-weight:850;
+  letter-spacing:.04em;
+}
+.day-tab.active{
+  background:linear-gradient(135deg,#3157d5,#7048e8);
+  color:#fff;
+  border-color:transparent;
+  box-shadow:0 6px 18px rgba(74,73,210,.20);
+}
+.snapshot-meta{
+  margin-top:16px;
+  padding-top:15px;
+  border-top:1px solid #dfe6f0;
+}
+.snapshot-name{
+  font-size:17px;
+  font-weight:850;
+  color:#172033;
+}
+.snapshot-note{
+  margin-top:5px;
+  font-size:13px;
+  color:#667085;
+}
+
+/* WEB-03C: desktop hero title refinement */
+@media (min-width: 1100px) {
+  .hero h1 {
+    font-size: 54px;
+    line-height: 1.08;
+    letter-spacing: -0.035em;
+    white-space: nowrap;
+  }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="brand">AWS <span>AI Job Search Agent</span> <span style="color:#98a2b3;font-weight:500;margin:0 8px">|</span> Jingru Chen</div>
+  <nav class="nav">
+    <a href="#how">How It Works</a>
+    <a href="#architecture">Architecture</a>
+    <a href="#jobs">Live Jobs</a>
+  </nav>
+</header>
+
+<section class="hero">
+<div class="wrap hero-grid">
+  <div>
+    <div class="eyebrow">Featured Project · AWS / Agentic AI</div>
+    <h1>AWS AI Job Search Agent</h1>
+    <h2>Discover opportunities. Govern eligibility. Rank with ML. Review with GenAI.</h2>
+    <p class="lead">An end-to-end AWS AI platform that discovers jobs across multiple employers, applies profile and clearance eligibility rules, ranks opportunities with Amazon SageMaker, and uses Amazon Bedrock for evidence-grounded AI review.</p>
+    <div class="actions">
+      <a class="btn btn-primary" href="#jobs">Explore Live Job Feed</a>
+      <a class="btn btn-secondary" href="#architecture">View Architecture</a>
+    </div>
+    <div class="stack">
+      <span class="pill">AWS Lambda</span><span class="pill">Amazon S3</span>
+      <span class="pill">SageMaker</span><span class="pill">Amazon Bedrock</span>
+      <span class="pill">Python</span>
+    </div>
+  </div>
+  <aside class="hero-panel">
+    <div class="eyebrow">Validated AWS Baseline</div>
+    <div class="metric"><div><small>Collection</small><strong>Multi-company connectors</strong></div><span class="status">PASS</span></div>
+    <div class="metric"><div><small>Machine Learning</small><strong>SageMaker ranking</strong></div><span class="status">PASS</span></div>
+    <div class="metric"><div><small>Generative AI</small><strong>Bedrock grounded review</strong></div><span class="status">PASS</span></div>
+    <div class="metric"><div><small>Governance</small><strong>Profile + clearance policy</strong></div><span class="status">PASS</span></div>
+    <div class="metric"><div><small>Validation</small><strong>E2E contract validation</strong></div><span class="status">PASS</span></div>
+  </aside>
+</div>
+</section>
+
+<section class="section" id="how">
+<div class="wrap">
+  <div class="kicker">How It Works</div>
+  <h2>From job discovery to governed AI review</h2>
+  <p class="section-intro">The platform separates collection, eligibility, machine-learning ranking and generative-AI review so each layer has a clear responsibility and validation boundary.</p>
+  <div class="workflow">
+    <article class="step"><div class="step-no">1</div><h3>Discover</h3><p>Employer-specific connectors collect official career listings and normalize them into a common job structure.</p></article>
+    <article class="step"><div class="step-no">2</div><h3>Govern</h3><p>Profile-aware rules evaluate job category, user eligibility and government-contractor clearance requirements.</p></article>
+    <article class="step"><div class="step-no">3</div><h3>Rank</h3><p>Amazon SageMaker produces an ML ranking signal to help prioritize opportunities for review.</p></article>
+    <article class="step"><div class="step-no">4</div><h3>Review</h3><p>Amazon Bedrock generates an evidence-grounded review while preserving limitations and human-review controls.</p></article>
+  </div>
+</div>
+</section>
+
+<section class="section alt">
+<div class="wrap">
+  <div class="kicker">Engineering Capabilities</div>
+  <h2>Built for extensibility, traceability and governance</h2>
+  <div class="features">
+    <article class="feature"><div class="feature-icon">MULTI-PROFILE</div><h3>Profile isolation</h3><p>Separate role families, search policies and eligibility constraints for different users.</p></article>
+    <article class="feature"><div class="feature-icon">CONNECTORS</div><h3>Company-specific adapters</h3><p>Employer-specific collection logic sits behind a normalized downstream job contract.</p></article>
+    <article class="feature"><div class="feature-icon">MACHINE LEARNING</div><h3>ML-based ranking</h3><p>SageMaker adds a model-based prioritization signal without presenting it as a calibrated hiring probability.</p></article>
+    <article class="feature"><div class="feature-icon">GENERATIVE AI</div><h3>Evidence-grounded review</h3><p>Bedrock reviews verified project evidence and carries explicit evidence limitations forward.</p></article>
+    <article class="feature"><div class="feature-icon">GOVERNANCE</div><h3>Clearance-aware policy</h3><p>Public Trust and approved low-level requirements can be distinguished from higher-clearance roles.</p></article>
+    <article class="feature"><div class="feature-icon">VALIDATION</div><h3>E2E contract validation</h3><p>Identity, source truth, model limitations, governance status and provenance are validated across layers.</p></article>
+  </div>
+</div>
+</section>
+
+<section class="section">
+<div class="wrap demo-grid">
+  <div>
+    <div class="kicker">Validated Pipeline Example</div>
+    <h2>Real output, with model limitations preserved</h2>
+    <p class="section-intro">A GDIT role demonstrates how raw job evidence, clearance policy, SageMaker ranking and Bedrock review are composed into a governed result.</p>
+    <p class="muted">The platform intentionally separates an ML ranking signal from a probability of hiring, and retains human-review controls before AI-generated content is treated as website-approved evidence.</p>
+  </div>
+  <article class="job-demo">
+    <div class="demo-head">
+      <div><span class="badge">GDIT · RQ227420</span><h3>Data Scientist Principal</h3><div class="muted">Remote · United States</div></div>
+      <span class="badge good">ELIGIBLE</span>
+    </div>
+    <div class="row"><div><small>Clearance policy</small><strong>Public Trust</strong></div><strong class="status" style="color:#087a55">ALLOW</strong></div>
+    <div class="row"><div><small>Amazon SageMaker</small><strong>ML ranking score</strong></div><strong>0.892</strong></div>
+    <div class="row"><div><small>Amazon Bedrock</small><strong>Evidence-grounded AI review</strong></div><strong>COMPLETE</strong></div>
+    <div class="row"><div><small>Governance</small><strong>Website display</strong></div><strong>HUMAN REVIEW</strong></div>
+    <p class="note">Ranking score is a small-sample demonstration output and is not a calibrated probability. AI review remains subject to explicit evidence limitations and human approval.</p>
+    <a class="btn" style="background:#10285c;color:white;margin-top:8px" target="_blank" rel="noopener noreferrer" href="https://www.gdit.com/careers/job/1d6d2732b/data-scientist-principal/">View official GDIT role</a>
+  </article>
+</div>
+</section>
+
+<section class="section alt" id="architecture">
+<div class="wrap">
+  <div class="kicker">Technical Architecture</div>
+  <h2>Architecture-ready without over-coupling the platform</h2>
+  <div class="arch">
+    <div class="arch-flow">
+      <span class="node">Profile Config</span><span class="arrow">â†’</span>
+      <span class="node">Company Connectors</span><span class="arrow">â†’</span>
+      <span class="node">Canonical Job Data</span><span class="arrow">â†’</span>
+      <span class="node">AWS Lambda</span><span class="arrow">â†’</span>
+      <span class="node">Amazon S3</span><span class="arrow">â†’</span>
+      <span class="node">SageMaker</span><span class="arrow">+</span>
+      <span class="node">Bedrock</span><span class="arrow">â†’</span>
+      <span class="node">Governed Result</span>
+    </div>
+    <p>New employers can be added through connector boundaries; profile and job-family rules remain centrally managed. Proven source, ML, GenAI and governance evidence is carried forward rather than silently reinterpreted downstream.</p>
+  </div>
+</div>
+</section>
+
+<section class="section" id="jobs">
+<div class="wrap">
+  <div class="kicker">Daily Job Search</div>
+
+<div class="search-history">
+  <div class="search-history-top">
+    <div>
+      <div class="search-history-title">7-Day Search History</div>
+      <div class="search-history-schedule">Rolling history · Up to 7 successful daily snapshots</div>
+    </div>
+    <div class="search-history-schedule">Scheduled refresh · 8:00 AM ET</div>
+  </div>
+
+  <div class="day-tabs" aria-label="Daily search history">
+    <button class="day-tab active" type="button">SEP 28 · TODAY</button>
+  </div>
+
+  <div class="snapshot-meta">
+    <div class="snapshot-name">Job Search Snapshot · September 28, 2026</div>
+    <div class="snapshot-note">
+      First live daily snapshot · Results reflect this search run and should be confirmed on each employer's official career site.
+    </div>
+  </div>
+</div>
+  <h2>Profile-isolated opportunity views</h2>
+  <p class="section-intro">Official employer career listings organized for separate user profiles. Availability and requirements should always be confirmed on the employer's official career page.</p>
+  <div class="tabs">
+    <button id="frankTab" class="active">Frank C. · Data Science & AI</button>
+    <button id="familyTab">W. Y. · Bioanalysis</button>
+  </div>
+  <div id="frank"><div id="companies"></div></div>
+  <div id="family" class="hidden"><div id="familyCompanies"></div></div>
+</div>
+</section>
+
+<footer>
+  Independent AWS-hosted portfolio demonstration. Job availability, location, clearance and role requirements remain subject to each employer's official career posting. ML ranking outputs are demonstration signals, not calibrated probabilities of hiring.
+  <div style="margin-top:10px;font-weight:750;color:#344054">
+    Designed &amp; Built by Jingru Chen · 2026
+  </div>
+</footer>
+
+<script>
+const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+document.getElementById("frankTab").onclick=()=>switchTo("frank");
+document.getElementById("familyTab").onclick=()=>switchTo("family");
+
+function switchTo(which){
+  for(const x of ["frank","family"]){
+    document.getElementById(x).classList.toggle("hidden",x!==which);
+    document.getElementById(x+"Tab").classList.toggle("active",x===which)
+  }
+}
+
+function card(j){
+  const url=j.url||j.apply_url||"#";
+  return '<article class="card"><h3>'+esc(j.title)+'</h3>'+
+    '<p class="muted">'+esc(j.location||"Location unavailable")+'</p>'+
+    '<p class="muted">Posted: '+esc(j.posted_date||"Date unavailable")+'</p>'+
+    (j.clearance_status?'<p class="muted">'+esc(j.clearance_status)+'</p>':'')+
+    '<a class="btn" target="_blank" rel="noopener noreferrer" href="'+esc(url)+'">Official job</a></article>';
+}
+
+fetch("./jobs.json")
+.then(r=>{if(!r.ok)throw Error("Data unavailable");return r.json()})
+.then(data=>{
+  const root=document.getElementById("companies");
+  root.innerHTML=Object.entries(data.companies||{}).map(([id,name])=>{
+    const jobs=(data.jobs&&data.jobs[id])||[];
+    return '<section><h3 class="company-title">'+esc(name)+' <span class="badge">'+jobs.length+' roles</span></h3>'+
+      (jobs.length?'<div class="grid">'+jobs.map(card).join("")+'</div>':
+      '<div class="empty">No roles currently meet the current profile filters.</div>')+'</section>';
+  }).join("");
+
+  const familyRoot=document.getElementById("familyCompanies");
+  const family=(data.profiles&&data.profiles.family_a)||{};
+  const companies=family.companies||{};
+  familyRoot.innerHTML=Object.entries(companies).map(([id,jobs])=>
+    '<section><h3 class="company-title">'+esc(id.charAt(0).toUpperCase()+id.slice(1))+
+    ' <span class="badge">'+jobs.length+' roles</span></h3><div class="grid">'+jobs.map(card).join("")+'</div></section>'
+  ).join("") || '<div class="empty">No Family A roles are currently available.</div>';
+})
+.catch(()=>{
+  document.getElementById("companies").textContent="Job data could not load.";
+  document.getElementById("familyCompanies").textContent="Job data could not load.";
+});
+</script>
+</body>
+</html>
+
