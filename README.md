@@ -12,7 +12,7 @@
 
 🌐 **AWS Website:** [Open Live AWS Job Search Agent](https://main.d1lez6edks2xou.amplifyapp.com/)
 
-📊 **Project Presentation:** [View AWS AI Job Search Agent V1 PPT](./AWS_AI_Job_Search_Agent_V1_ROADMAP_20260929.pptx)
+📊 **Project Presentation:** [View AWS AI Job Search Agent V1 PPT](./AWS_AI_Job_Search_Agent_V1_ROADMAP_20260929.pdf)
 
 
 ## Project at a Glance
