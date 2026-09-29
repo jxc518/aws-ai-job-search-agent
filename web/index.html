@@ -273,13 +273,13 @@ footer{padding:30px 5%;color:#667085;border-top:1px solid var(--line);font-size:
   <h2>Architecture-ready without over-coupling the platform</h2>
   <div class="arch">
     <div class="arch-flow">
-      <span class="node">Profile Config</span><span class="arrow">â†’</span>
-      <span class="node">Company Connectors</span><span class="arrow">â†’</span>
-      <span class="node">Canonical Job Data</span><span class="arrow">â†’</span>
-      <span class="node">AWS Lambda</span><span class="arrow">â†’</span>
-      <span class="node">Amazon S3</span><span class="arrow">â†’</span>
+      <span class="node">Profile Config</span><span class="arrow">&rarr;</span>
+      <span class="node">Company Connectors</span><span class="arrow">&rarr;</span>
+      <span class="node">Canonical Job Data</span><span class="arrow">&rarr;</span>
+      <span class="node">AWS Lambda</span><span class="arrow">&rarr;</span>
+      <span class="node">Amazon S3</span><span class="arrow">&rarr;</span>
       <span class="node">SageMaker</span><span class="arrow">+</span>
-      <span class="node">Bedrock</span><span class="arrow">â†’</span>
+      <span class="node">Bedrock</span><span class="arrow">&rarr;</span>
       <span class="node">Governed Result</span>
     </div>
     <p>New employers can be added through connector boundaries; profile and job-family rules remain centrally managed. Proven source, ML, GenAI and governance evidence is carried forward rather than silently reinterpreted downstream.</p>
@@ -301,7 +301,7 @@ footer{padding:30px 5%;color:#667085;border-top:1px solid var(--line);font-size:
   </div>
 
   <div class="day-tabs" aria-label="Daily search history">
-    <button class="day-tab active" type="button">SEP 28 · TODAY</button>
+    <button class="day-tab active" type="button">SEP 28 · PRODUCTION</button>
   </div>
 
   <div class="snapshot-meta">
@@ -374,6 +374,63 @@ fetch("./jobs.json")
   document.getElementById("familyCompanies").textContent="Job data could not load.";
 });
 </script>
+
+<!-- V2_RECRUITER_DASHBOARD_START -->
+<section id="v2-recruiter-dashboard" style="padding:72px 0;">
+  <div class="container">
+    <div style="margin-bottom:28px;">
+      <div style="font-size:13px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;opacity:.7;">AWS Production Evidence</div>
+      <h2 style="margin:8px 0 10px;">7-Day Job Search History</h2>
+      <p style="max-width:780px;opacity:.78;line-height:1.65;">Rolling seven-day view of published daily search snapshots. Only validated snapshots are presented as production evidence.</p>
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:10px;margin:26px 0 38px;">
+      <div class="card" style="padding:16px;text-align:center;opacity:.55;"><strong>SEP 23</strong><br><span style="font-size:12px;">No published snapshot</span></div>
+      <div class="card" style="padding:16px;text-align:center;opacity:.55;"><strong>SEP 24</strong><br><span style="font-size:12px;">No published snapshot</span></div>
+      <div class="card" style="padding:16px;text-align:center;opacity:.55;"><strong>SEP 25</strong><br><span style="font-size:12px;">No published snapshot</span></div>
+      <div class="card" style="padding:16px;text-align:center;opacity:.55;"><strong>SEP 26</strong><br><span style="font-size:12px;">No published snapshot</span></div>
+      <div class="card" style="padding:16px;text-align:center;opacity:.55;"><strong>SEP 27</strong><br><span style="font-size:12px;">No published snapshot</span></div>
+      <div class="card" style="padding:16px;text-align:center;border:2px solid currentColor;"><strong>SEP 28</strong><br><span style="font-size:12px;">Production</span></div>
+      <div class="card" style="padding:16px;text-align:center;opacity:.72;"><strong>SEP 29</strong><br><span style="font-size:12px;">Runtime validated</span></div>
+    </div>
+
+    <div class="card" style="padding:30px;margin-bottom:24px;">
+      <div style="display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;align-items:flex-start;">
+        <div>
+          <div style="font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;opacity:.65;">Validated Production Snapshot</div>
+          <h3 style="margin:7px 0 4px;font-size:26px;">September 28, 2026</h3>
+          <div style="opacity:.72;">Frank &middot; GDIT &middot; Scheduled AWS collection &middot; SUCCEEDED</div>
+        </div>
+        <div style="font-weight:700;">8:00 AM ET</div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:16px;margin-top:28px;">
+        <div style="padding:20px;border:1px solid rgba(127,127,127,.25);border-radius:14px;"><div style="font-size:32px;font-weight:800;">794</div><div style="opacity:.7;">Raw Hits</div></div>
+        <div style="padding:20px;border:1px solid rgba(127,127,127,.25);border-radius:14px;"><div style="font-size:32px;font-weight:800;">397</div><div style="opacity:.7;">Unique Jobs</div></div>
+        <div style="padding:20px;border:1px solid rgba(127,127,127,.25);border-radius:14px;"><div style="font-size:32px;font-weight:800;">90</div><div style="opacity:.7;">Source Requests</div></div>
+      </div>
+    </div>
+
+    <div class="card" style="padding:30px;">
+      <div style="font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;opacity:.65;">Validated AI Decision Example</div>
+      <h3 style="margin:7px 0 5px;font-size:24px;">GDIT &middot; RQ227420</h3>
+      <p style="opacity:.72;margin-top:0;">A real job record used to validate the governed ranking and AWS inference path.</p>
+
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:14px;margin-top:24px;">
+        <div style="padding:18px;border:1px solid rgba(127,127,127,.25);border-radius:14px;"><strong>0.8923</strong><br><span style="font-size:13px;opacity:.7;">SageMaker Fit Score</span></div>
+        <div style="padding:18px;border:1px solid rgba(127,127,127,.25);border-radius:14px;"><strong>PUBLIC TRUST &rarr; ALLOW</strong><br><span style="font-size:13px;opacity:.7;">Deterministic Governance</span></div>
+        <div style="padding:18px;border:1px solid rgba(127,127,127,.25);border-radius:14px;"><strong>COMPLETE</strong><br><span style="font-size:13px;opacity:.7;">Bedrock Review</span></div>
+        <div style="padding:18px;border:1px solid rgba(127,127,127,.25);border-radius:14px;"><strong>HUMAN REVIEW</strong><br><span style="font-size:13px;opacity:.7;">Publication Decision</span></div>
+      </div>
+
+      <div style="margin-top:25px;padding-top:22px;border-top:1px solid rgba(127,127,127,.2);font-size:14px;line-height:1.7;opacity:.78;">
+        V2 runtime validation independently reproduced the previously validated SageMaker score of <strong>0.8922722935676575</strong> through the AWS runtime adapter, S3, and SageMaker Batch Transform, with an absolute score difference of <strong>0.0</strong>.
+      </div>
+    </div>
+  </div>
+</section>
+<!-- V2_RECRUITER_DASHBOARD_END -->
+
 </body>
 </html>
 
