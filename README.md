@@ -1,21 +1,69 @@
 # AWS AI Job Search Agent
 
-### Production-Oriented AWS AI Platform for Profile-Isolated Job Discovery, Governance, ML Ranking & GenAI Review
+### Production-Oriented AWS AI Platform for Profile-Isolated Job Discovery, Governance, ML Ranking, GenAI Review & Governed Analytics
 
-**Employer Adapters | Deterministic Governance | Amazon SageMaker | XGBoost | Amazon Bedrock | Nova 2 Lite | AWS Web Publication | LangSmith Observability**
+**Employer Adapters | Deterministic Governance | AWS Lambda | Amazon SageMaker | XGBoost | Amazon Bedrock | Nova 2 Lite | Amazon S3 | AWS Glue / PySpark | Parquet | Athena | Amazon MWAA / Airflow | CloudWatch | LangSmith**
 
-> A production-oriented AWS AI portfolio project that discovers jobs from heterogeneous employer sources, applies deterministic governance, ranks eligible opportunities with profile-specific XGBoost models, performs grounded GenAI review with Amazon Nova 2 Lite, publishes daily profile-isolated results, and preserves runtime observability.
+> A production-oriented AWS AI portfolio project that discovers jobs from heterogeneous employer sources, applies deterministic governance, ranks eligible opportunities with profile-specific XGBoost models, performs grounded GenAI review with Amazon Nova 2 Lite, publishes daily profile-isolated results, and extends the operational platform with governed analytics, workflow orchestration, and layered observability.
 
 ---
 
 ## Live Project
 
-**Status:** DEPLOYED — Phase 1 Complete (2026-09-29)  
+**Current Release:** V2 / Phase 2 — Production Data, Orchestration & Observability  
+**Status:** VALIDATED / PORTFOLIO-READY — Phase 2 Complete (2026-10-04)  
 
 🌐 **AWS Website:** [Open Live AWS Job Search Agent](https://main.d1lez6edks2xou.amplifyapp.com/)
 
-📊 **Project Presentation:** [View AWS AI Job Search Agent V1 PPT](./AWS_AI_Job_Search_Agent_V1_ROADMAP_20260929.pdf)
+📊 **V2 Presentation:** [View AWS AI Job Search Agent V2 PPT](./AWS_AI_Job_Search_Agent_V2_ROADMAP_20261004.pptx)
 
+📄 **V1 Baseline Presentation:** [View AWS AI Job Search Agent V1 PDF](./AWS_AI_Job_Search_Agent_V1_ROADMAP_20260929.pdf)
+
+> **Production boundary:** EventBridge remains the unattended daily scheduler for the core V2-R13 job-search runtime. Amazon MWAA was added as a controlled orchestration layer for the multi-step analytics workflow; it does not replace the production daily scheduler.
+
+## V2 / Phase 2 — Production Data, Orchestration & Observability
+
+V2 extends the validated V1 job-search platform without rewriting the frozen core runtime.
+
+### What V2 Adds
+
+- **AWS Glue / PySpark analytics ETL** over profile-isolated daily S3 snapshots.
+- **Analytics-ready Parquet** output published through the **AWS Glue Data Catalog** and validated with **Amazon Athena**.
+- **Amazon MWAA / Apache Airflow** orchestration with explicit task dependencies, retry/failure handling, run-scoped staging, governed promotion, and final validation.
+- **Controlled end-to-end validation:** **8/8 Airflow tasks passed**.
+- **CloudWatch runtime evidence:** the successful controlled workflow emitted **`MWAA_E2E_PASS`**.
+- **Layered observability:** Airflow for workflow state and dependencies, CloudWatch for AWS runtime evidence, and LangSmith for AI/agent execution tracing.
+- **Evidence-based release freeze:** V2-R13, Glue Analytics V1, and MWAA V1 were frozen only after controlled validation and hash verification.
+
+### V1 → V2 Evolution
+
+| Phase | Primary Scope | Validated Outcome |
+|---|---|---|
+| **V1 / Phase 1** | Core AI job-search platform | Employer adapters → deterministic governance → profile-specific XGBoost → Bedrock Nova 2 Lite → profile-isolated publication |
+| **V2 / Phase 2** | Production data & workflow engineering | Glue/PySpark → Parquet/Data Catalog/Athena → MWAA/Airflow → CloudWatch + LangSmith observability |
+
+### V2 Controlled Analytics Workflow
+
+```mermaid
+flowchart LR
+    A[V2-R13 Daily S3 Snapshot] --> B[MWAA / Airflow]
+    B --> C[Glue / PySpark Staging ETL]
+    C --> D[Staging Validation]
+    D --> E[Governed Promotion]
+    E --> F[Partitioned Parquet]
+    F --> G[Glue Data Catalog]
+    G --> H[Athena Validation]
+
+    B -. workflow state .-> I[CloudWatch]
+    A -. AI / agent evidence .-> J[LangSmith]
+```
+
+**Validated orchestration contract:**  
+`validate_runtime_config → verify_v2_r13 → verify_source_snapshot → start_glue_staging → wait_glue_staging → validate_staging → governed_promotion → validate_final`
+
+The successful controlled MWAA run completed all eight tasks and preserved the frozen V2-R13 and Glue promotion boundaries.
+
+---
 
 ## Project at a Glance
 
@@ -28,7 +76,9 @@
 | GenAI Review | Amazon Nova 2 Lite through Amazon Bedrock |
 | Lifecycle Management | NEW / recent-score / inactive job resolution |
 | Publication | Daily AWS-hosted, profile-isolated results |
-| Observability | LangSmith runtime tracing and persisted execution artifacts |
+| Analytics Engineering | AWS Glue / PySpark → partitioned Parquet → Glue Data Catalog → Athena validation |
+| Workflow Orchestration | Amazon MWAA / Airflow with dependencies, retries, staging, governed promotion, and final validation |
+| Observability | Airflow workflow state + CloudWatch runtime evidence + LangSmith AI/agent tracing |
 
 ### Validated Daily Run
 
@@ -448,7 +498,13 @@ The objective is not to maximize the number of jobs displayed. It is to reduce a
 
 # Runtime Observability
 
-The project uses LangSmith to provide presentation-quality runtime observability across the governed workflow.
+V2 uses layered observability rather than treating monitoring as a single tool:
+
+- **Amazon MWAA / Airflow** — workflow state, task dependencies, retries, and execution history.
+- **Amazon CloudWatch** — AWS runtime logs and controlled E2E evidence, including `MWAA_E2E_PASS`.
+- **LangSmith** — application-level AI/agent tracing across the governed job-search workflow.
+
+LangSmith provides presentation-quality application tracing across the governed workflow.
 
 The validated trace hierarchy includes stages such as:
 
@@ -495,7 +551,7 @@ aws-ai-job-search-agent/
         └── architecture diagrams
 ```
 
-The V1 portfolio cleanup intentionally avoids reorganizing working source-code paths simply for presentation purposes.
+The portfolio cleanup intentionally avoids reorganizing working source-code paths simply for presentation purposes.
 
 The goal is:
 
@@ -503,7 +559,7 @@ The goal is:
 
 ---
 
-# V1 Current State
+# Phase 1 / V1 — Frozen Core Platform Baseline
 
 ### Implemented / Validated
 
@@ -521,27 +577,16 @@ The goal is:
 - Employer-level Top-5 ranking
 - Daily profile-isolated publication
 - Seven-day history design
-- Runtime observability
+- LangSmith application tracing
 - AWS execution evidence
+
+V1 remains the frozen core-platform baseline underneath the additive V2 production-engineering layer.
 
 ---
 
 # Engineering Roadmap
 
-## V2 — Scale & Harden
-
-Focus areas:
-
-- additional employer adapters;
-- larger labeled datasets;
-- systematic ranking evaluation;
-- model calibration;
-- regression testing;
-- data-quality monitoring;
-- cost and latency metrics;
-- stronger failure recovery.
-
----
+V1 and V2 are validated baselines. Future work starts beyond the completed Phase 2 production-engineering layer.
 
 ## V3 — Agentic Workflow
 
@@ -613,9 +658,9 @@ for the final project presentation.
 
 ## Project Status
 
-**Status: VALIDATED / PORTFOLIO-READY**
+**Status: V2 / PHASE 2 VALIDATED / PORTFOLIO-READY**
 
-The V1 architecture is treated as a frozen baseline for future V2–V4 extensions.
+V1 is retained as the frozen core-platform baseline. V2 adds the validated production data, orchestration, and observability layer. Future work begins with V3+ extensions rather than treating V2 as unfinished.
 
 
  
